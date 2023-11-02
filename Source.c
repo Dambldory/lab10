@@ -1,96 +1,85 @@
 #include <stdio.h>
-#include <stdlib.h> 
 #include <locale.h>
+#include <math.h>
 
-#define ROW 5
-#define COL 5
+double fa(double x);
+double fb(double x);
+double sin_n(double x, int N);
 
 void main()
 {
 	setlocale(LC_ALL, "RUS");
-	/*int row, col;
-	int a, b;
-	a = 30;
-	b = 1;
-	printf("\n");
-	for (row = 1; row <= ROW; ++row)
+	//Задание 1
+	/*double x;
+	puts("Введите х:  ");
+	scanf("%lf", &x);
+	printf("fa(x)=%.3lf , fb(x)=%.3lf", fa(x), fb(x));
+	printf("\nПроизведение: %.4lf\n"
+		"Удвоенная сумма значений: %.4lf\n"
+		"Разность квадратов: %.4lf",
+		fa(x) * fb(x),
+		2*(fa(x) + fb(x)),
+		pow(fa(x),2) - pow(fb(x),2));
+	*/
+	double x;
+	int n;
+	puts("Введите х:  ");
+	scanf("%lf", &x);
+	getchar();
+	printf("\nВведите число шагов:  ");
+	scanf("%d", &n);
+	printf("\nПользовательская функция через сумму ряда: %.4lf", sin_n(x, n));
+	printf("\nФункция стандартной библиотеки: %.4lf", sin(x));
+	//printf("\n%d", factr(n));
+}
+
+
+double fa(double x)
+{
+	double y;
+	if (x <= 3)
+		y = pow(x, 2) - 3 * x + 9;
+	else if (x > 3)
+		y = 1 / (pow(x, 3) + 3);
+	return y;
+}
+double fb(double x)
+{
+	double y;
+	y = x * exp(sin(pow(x, 2)));
+	return y;
+}
+
+int factr(int x) 
+{
+	int y = 1;
+	for (int i = 1; i <= x; i++)
 	{
-		a = a - b;
-		++b;
-		for (col = 1; col <= row; col++)
-		{
-			printf("%5d", ++a);
-
-		}
-
-		printf("\n");
+		y *= i;
 	}
-	system("pause");*/
-	/*int x, y;
-	while (1)
+	return y;
+}
 
+double sin_n(double x, int n)
+{
+	double y = 0;
+	int k = 1;
+	for (int i = 1; i <= n; i++) 
 	{
-		printf("\nВведите произвольное число:");
-		scanf("%d", &x);
-		int k = 0;
-		int s = 0;
-		char a;
-		while (x != 0)
-		{
-			y = x % 10;
-			if (y == 3)
-				k += 1;
-			if (y > 5)
-				++s;
-			x /= 10;
-		}
-		printf("\nКоличество цифр \"3\" - %d\nКоличество цифр больше 5 - %d", k, s);
-		printf("\nПродолжить ? (Да - y, нет - n)");
-		if ((a = getchar()) == 'n')
-			break;
-	}*/
-	int a, h, k;
-	char c, d;
-	printf("Введите символ для вывода, длину верхнего основания, высоту трапеции (Через запятую): ");
-	scanf("%c,%d,%d", &c, &a, &h);
-	k = 1;
-	printf("\n");
-	for (int i = 1; i <= h; ++i)
-	{
-		for (int j = 1; j <= a + ((h - 1) * 2); ++j)
-		{
-			if (j <= h - k || j > (a + ((h - 1) * 2)) - (h - k))
-				printf(" ");
-			else
-				printf("%c", c);
-		}
-		++k;
-		printf("\n");
+		y += pow(-1, k - 1) * pow(x, 2*k - 1) / factr(2*k-1);
+		k += 1;
 	}
-	while (1)
-	{
-		printf("\nЖелаете изменить размер? (Да - y, нет - n)");
-		scanf("%c", &d);
-		scanf("%c", &d);
-		if (d == 'n')
-			break;
-		else
-			printf("\nВведите длину верхнего основания, высоту трапеции (Через запятую): ");
-		scanf("%d,%d", &a, &h);
-		k = 1;
-		printf("\n");
-		for (int i = 1; i <= h; ++i)
-		{
-			for (int j = 1; j <= a + ((h - 1) * 2); ++j)
-			{
-				if (j <= h - k || j > (a + ((h - 1) * 2)) - (h - k))
-					printf(" ");
-				else
-					printf("%c", c);
-			}
-			++k;
-			printf("\n");
-		}
-	}
+	return y;
+}
 
+double sin_eps(double x, double eps)
+{
+	double y = 0;
+	int k = 1;
+	while(fabs(x)>eps)
+	{
+		y += pow(-1, k - 1) * pow(x, 2 * k - 1) / factr(2 * k - 1);
+		k += 1;
+	}
+	return y;
 }
